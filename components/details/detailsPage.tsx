@@ -108,7 +108,7 @@ export default async function DetailsPage({
           <SectionHeader>Overview</SectionHeader>
           <p>{data.overview}</p>
         </div>
-        <Card className="flex flex-1 p-8">
+        <Card className="flex flex-1 justify-center p-8">
           <MovieActions />
         </Card>
       </section>

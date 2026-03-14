@@ -3,16 +3,48 @@
 import Link from "next/link"
 import { Input } from "./ui/input"
 import { BellIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { NormalizedMedia } from "@/types/normalized"
 import Image from "next/image"
 import { getImageUrl } from "@/lib/getImageUrl"
 import { Spinner } from "./ui/spinner"
+import { useRouter } from "next/navigation"
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 
 export default function SearchNavbar() {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<NormalizedMedia[]>([])
   const [loading, setLoading] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
+  const router = useRouter()
+  const controllerRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    function handleConfirmSearch(e: KeyboardEvent) {
+      if (
+        e.key === "Enter" &&
+        document.activeElement === searchInputRef.current
+      ) {
+        setResults([])
+        controllerRef.current?.abort()
+        router.push(`/search?query=${query}`)
+      }
+    }
+
+    document.addEventListener("keydown", handleConfirmSearch)
+
+    return () => document.removeEventListener("keydown", handleConfirmSearch)
+  }, [query, controllerRef, router])
+
+  useEffect(() => {
+    function handleClearResults() {
+      controllerRef.current?.abort()
+      setResults([])
+    }
+    document.addEventListener("click", handleClearResults)
+
+    return () => removeEventListener("click", handleClearResults)
+  }, [controllerRef])
 
   useEffect(() => {
     if (!query) {
@@ -20,14 +52,14 @@ export default function SearchNavbar() {
       return
     }
 
-    const controller = new AbortController()
+    controllerRef.current = new AbortController()
 
     const timer = setTimeout(async () => {
       try {
         setLoading(true)
         setResults([])
         const res = await fetch(`/api/search?query=${query}`, {
-          signal: controller.signal,
+          signal: controllerRef.current?.signal,
         })
         const data = await res.json()
         setResults(data)
@@ -42,11 +74,9 @@ export default function SearchNavbar() {
 
     return () => {
       clearTimeout(timer)
-      controller.abort()
+      controllerRef.current?.abort()
     }
-  }, [query])
-
-  console.log(results)
+  }, [query, controllerRef])
 
   return (
     <header className="border-b">
@@ -70,11 +100,12 @@ export default function SearchNavbar() {
               <Input
                 placeholder="search titles"
                 className="w-full py-5 pl-10"
-                onChange={(e) => setQuery(e.target.value.trim())}
+                onChange={(e) => setQuery(e.target.value)}
+                ref={searchInputRef}
               />
             </div>
             {loading && (
-              <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-md border bg-popover p-5 shadow-md">
+              <div className="absolute top-full left-0 z-100 mt-2 w-full rounded-md border bg-popover p-5 shadow-md">
                 <Spinner className="mx-auto size-7" />
               </div>
             )}
@@ -105,6 +136,20 @@ export default function SearchNavbar() {
           <span>
             <BellIcon size={23} />
           </span>
+          {/* clerk auth components */}
+          <div>
+            <Show when="signed-out">
+              <SignInButton />
+              <SignUpButton>
+                <button className="ml-4 h-10 cursor-pointer rounded-full bg-[#6c47ff] px-4 text-sm font-medium text-white sm:h-12 sm:px-5 sm:text-base">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+          </div>
         </div>
       </nav>
     </header>
