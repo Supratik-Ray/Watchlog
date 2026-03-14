@@ -4,9 +4,9 @@ import { watchlistTable } from "@/db/schema"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 
-type WatchStatus = "plan-to-watch" | "watching" | "watched"
+export type WatchStatus = "plan-to-watch" | "watching" | "watched"
 
-type WatchData = {
+export type WatchData = {
   mediaId: string
   mediaType: "movie" | "tv"
   mediaTitle: string

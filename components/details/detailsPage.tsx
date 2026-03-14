@@ -109,7 +109,14 @@ export default async function DetailsPage({
           <p>{data.overview}</p>
         </div>
         <Card className="flex flex-1 justify-center p-8">
-          <MovieActions />
+          <MovieActions
+            mediaDetails={{
+              mediaId: data.id.toString(),
+              mediaType: type,
+              mediaTitle: title,
+              mediaPoster: data.poster_path,
+            }}
+          />
         </Card>
       </section>
 

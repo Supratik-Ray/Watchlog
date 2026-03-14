@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { Toaster } from "react-hot-toast"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -33,7 +34,10 @@ export default function RootLayout({
     >
       <body className="flex min-h-screen flex-col">
         <ThemeProvider>
-          <ClerkProvider>{children}</ClerkProvider>
+          <ClerkProvider>
+            {children}
+            <Toaster position="top-center" />
+          </ClerkProvider>
         </ThemeProvider>
       </body>
     </html>
