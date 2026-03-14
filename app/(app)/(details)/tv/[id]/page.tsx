@@ -6,8 +6,8 @@ export default async function ShowDetails({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const res = await getDetails("tv", id)
-  const data = await res.json()
+  const data = await getDetails("tv", id)
+
   return (
     <div>
       <pre>{JSON.stringify(data)}</pre>

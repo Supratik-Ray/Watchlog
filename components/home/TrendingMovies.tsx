@@ -5,8 +5,7 @@ import { getImageUrl } from "@/lib/getImageUrl"
 import Link from "next/link"
 
 export default async function TrendingMovies() {
-  const res = await getTrending("movie")
-  const data = await res.json()
+  const data = await getTrending("movie")
 
   return (
     <>
@@ -15,7 +14,7 @@ export default async function TrendingMovies() {
           <Card className="p-0">
             <Image
               src={getImageUrl(movie.poster_path, "w342")}
-              alt={movie.name}
+              alt={movie.title}
               width={342}
               height={513}
               className="h-100 w-80"

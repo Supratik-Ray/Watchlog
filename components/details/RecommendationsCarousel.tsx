@@ -18,9 +18,10 @@ import {
   CaretRightIcon,
 } from "@phosphor-icons/react"
 import { useState } from "react"
+import { Recommendations, TvRecommendations } from "tmdb-ts"
 
 type RecommendationCarouselProps = {
-  data: any
+  data: Recommendations | TvRecommendations
   type: "movie" | "tv"
 }
 

@@ -1,3 +1,10 @@
+import {
+  MovieDetails,
+  TvShowDetails,
+  TrendingResults,
+  Recommendations,
+  TvRecommendations,
+} from "tmdb-ts"
 const options = {
   method: "GET",
   headers: {
@@ -11,17 +18,40 @@ export function getMultiSearchResult(query: string) {
   return fetch(url, options)
 }
 
-export function getTrending(type: "movie" | "tv") {
+export async function getTrending(
+  type: "movie"
+): Promise<TrendingResults<"movie">>
+export async function getTrending(type: "tv"): Promise<TrendingResults<"tv">>
+export async function getTrending(type: "movie" | "tv") {
   const url = `${process.env.TMDB_BASE_URL}/trending/${type}/day`
-  return fetch(url, options)
+  const res = await fetch(url, options)
+  const data = await res.json()
+  return data
 }
 
-export function getDetails(type: "movie" | "tv", id: string) {
-  const url = `${process.env.TMDB_BASE_URL}/${type}/${id}?append_to_response=recommendations`
-  return fetch(url, options)
+export async function getDetails(
+  type: "movie",
+  id: string
+): Promise<MovieDetails>
+export async function getDetails(type: "tv", id: string): Promise<TvShowDetails>
+export async function getDetails(type: "movie" | "tv", id: string) {
+  const url = `${process.env.TMDB_BASE_URL}/${type}/${id}`
+  const res = await fetch(url, options)
+  const data = await res.json()
+  return data
 }
 
-export function getRecommendations(type: "movie" | "tv", id: string) {
+export async function getRecommendations(
+  type: "movie",
+  id: string
+): Promise<Recommendations>
+export async function getRecommendations(
+  type: "tv",
+  id: string
+): Promise<TvRecommendations>
+export async function getRecommendations(type: "movie" | "tv", id: string) {
   const url = `${process.env.TMDB_BASE_URL}/${type}/${id}/recommendations`
-  return fetch(url, options)
+  const res = await fetch(url, options)
+  const data = await res.json()
+  return data
 }

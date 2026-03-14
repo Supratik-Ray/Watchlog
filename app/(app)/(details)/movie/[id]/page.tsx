@@ -2,12 +2,10 @@ import MovieActions from "@/components/details/MovieActions"
 import Recommendations from "@/components/details/Recommendations"
 import LoadingSkeleton from "@/components/home/LoadingSkeleton"
 import SectionHeader from "@/components/SectionHeader"
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { getDetails } from "@/lib/api"
 import { formatMovieRuntime } from "@/lib/formatMovieRuntime"
 import { getImageUrl } from "@/lib/getImageUrl"
-import { PlusIcon } from "@phosphor-icons/react"
 import {
   CalendarCheckIcon,
   ClockIcon,
@@ -22,8 +20,7 @@ export default async function showMovies({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const res = await getDetails("movie", id)
-  const data = await res.json()
+  const data = await getDetails("movie", id)
   const imageUrl = getImageUrl(data.backdrop_path, "w1280")
   console.log(data)
   return (

@@ -1,5 +1,4 @@
 import { getRecommendations } from "@/lib/api"
-import PosterCard from "../PosterCard"
 import RecommendationsCarousel from "./RecommendationsCarousel"
 
 type RecommendationProps = {
@@ -11,7 +10,11 @@ export default async function Recommendations({
   id,
   type,
 }: RecommendationProps) {
-  const res = await getRecommendations(type, id)
-  const data = await res.json()
-  return <RecommendationsCarousel data={data} type={type} />
+  if (type === "movie") {
+    const data = await getRecommendations("movie", id)
+    return <RecommendationsCarousel data={data} type={type} />
+  } else {
+    const data = await getRecommendations("tv", id)
+    return <RecommendationsCarousel data={data} type={type} />
+  }
 }
