@@ -6,7 +6,7 @@ import { BellIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
 import { useEffect, useState } from "react"
 import { NormalizedMedia } from "@/types/normalized"
 import Image from "next/image"
-import { getImageUrl } from "@/utils/getImageUrl"
+import { getImageUrl } from "@/lib/getImageUrl"
 import { Spinner } from "./ui/spinner"
 
 export default function SearchNavbar() {

@@ -1,7 +1,8 @@
 import { NormalizedMedia } from "@/types/normalized"
 import { TMDBMediaItem } from "@/types/tmdb"
-import { normalizeMedia } from "@/utils/normalizeMedia"
+import { normalizeMedia } from "@/lib/normalizeMedia"
 import { NextRequest } from "next/server"
+import { getMultiSearchResult } from "@/lib/api"
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -11,16 +12,7 @@ export async function GET(request: NextRequest) {
     return Response.json({ error: "query is required!" }, { status: 400 })
   }
 
-  const url = `https://api.themoviedb.org/3/search/multi?query=${query}&include_adult=false&language=en-US&page=1`
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization: `Bearer ${process.env.TMDB_API_KEY}`,
-    },
-  }
-
-  const res = await fetch(url, options)
+  const res = await getMultiSearchResult(query)
   const data = await res.json()
 
   const normalized: NormalizedMedia[] = data.results

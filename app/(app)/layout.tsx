@@ -8,7 +8,7 @@ export default function SearchBarlayout({
   return (
     <>
       <SearchNavbar />
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
     </>
   )
 }

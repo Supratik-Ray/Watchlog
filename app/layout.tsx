@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -23,9 +23,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, "font-mono", fontMono.variable)}
+      className={cn(
+        "antialiased",
+        fontSans.variable,
+        "font-mono",
+        fontMono.variable
+      )}
     >
-      <body>
+      <body className="flex min-h-screen flex-col">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
