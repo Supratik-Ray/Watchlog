@@ -1,11 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import {
-  PaperPlaneIcon,
-  PaperPlaneRightIcon,
-  PlusIcon,
-} from "@phosphor-icons/react"
+import { PaperPlaneRightIcon, PlusIcon } from "@phosphor-icons/react"
 
 export default function MovieActions() {
   return (

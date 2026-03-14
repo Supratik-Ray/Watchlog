@@ -79,22 +79,24 @@ export default function SearchNavbar() {
               </div>
             )}
             {results.length > 0 && (
-              <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-md border bg-popover p-2 shadow-md">
+              <div className="absolute top-full left-0 z-100 mt-2 w-full rounded-md border bg-popover p-2 shadow-md">
                 {results.slice(0, 5).map((result) => (
-                  <div
+                  <Link
+                    href={`/${result.mediaType}/${result.id}`}
                     key={result.id}
-                    className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-muted"
                   >
-                    <Image
-                      src={getImageUrl(result.posterPath, "w92")}
-                      width={40}
-                      height={60}
-                      alt={result.title}
-                      className="h-15 w-10 rounded-sm object-cover"
-                    />
+                    <div className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-muted">
+                      <Image
+                        src={getImageUrl(result.posterPath, "w92")}
+                        width={40}
+                        height={60}
+                        alt={result.title}
+                        className="h-15 w-10 rounded-sm object-cover"
+                      />
 
-                    <span className="text-sm">{result.title}</span>
-                  </div>
+                      <span className="text-sm">{result.title}</span>
+                    </div>
+                  </Link>
                 ))}
               </div>
             )}

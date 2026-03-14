@@ -6,17 +6,10 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel"
 
 import { type CarouselApi } from "@/components/ui/carousel"
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-} from "@phosphor-icons/react"
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 import { Recommendations, TvRecommendations } from "tmdb-ts"
 

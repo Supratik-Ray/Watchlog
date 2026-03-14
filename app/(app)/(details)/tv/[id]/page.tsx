@@ -1,16 +1,9 @@
-import { getDetails } from "@/lib/api"
+import DetailsPage from "@/components/details/detailsPage"
 
-export default async function ShowDetails({
+export default async function TvShowPage({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = await params
-  const data = await getDetails("tv", id)
-
-  return (
-    <div>
-      <pre>{JSON.stringify(data)}</pre>
-    </div>
-  )
+  return <DetailsPage params={params} type="tv" />
 }
