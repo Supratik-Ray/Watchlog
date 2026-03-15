@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Input } from "./ui/input"
 import { BellIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { NormalizedMedia } from "@/types/normalized"
 import Image from "next/image"
 import { getImageUrl } from "@/lib/getImageUrl"
@@ -58,7 +58,7 @@ export default function SearchNavbar() {
       try {
         setLoading(true)
         setResults([])
-        const res = await fetch(`/api/search?query=${query}`, {
+        const res = await fetch(`/api/media/search?query=${query}`, {
           signal: controllerRef.current?.signal,
         })
         const data = await res.json()
