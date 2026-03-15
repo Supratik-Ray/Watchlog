@@ -32,7 +32,7 @@ export default function MovieActions({
 }) {
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
-  const [status, setStatus] = useState<WatchStatus>("plan-to-watch")
+  const [status, setStatus] = useState<WatchStatus>("plan_to_watch")
 
   function handleAdd() {
     startTransition(async () => {
@@ -74,7 +74,7 @@ export default function MovieActions({
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Status</SelectLabel>
-                <SelectItem value="plan-to-watch">Plan to watch</SelectItem>
+                <SelectItem value="plan_to_watch">Plan to watch</SelectItem>
                 <SelectItem value="watching">Watching</SelectItem>
                 <SelectItem value="watched">Watched</SelectItem>
               </SelectGroup>

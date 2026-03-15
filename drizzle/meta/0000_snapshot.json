@@ -1,9 +1,212 @@
 {
-  "id": "7f1ceda7-1ff4-4769-95b4-66260751df3b",
+  "id": "cbddfa7b-2821-4787-9415-b205fbe3c652",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.friendships": {
+      "name": "friendships",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "receiver_id": {
+          "name": "receiver_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "friendshipStatus",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "friendships_sender_id_receiver_id_unique": {
+          "name": "friendships_sender_id_receiver_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_id",
+            "receiver_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notification_type": {
+          "name": "notification_type",
+          "type": "NotificationType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reference_id": {
+          "name": "reference_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "read": {
+          "name": "read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recommendations": {
+      "name": "recommendations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "receiver_id": {
+          "name": "receiver_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_type": {
+          "name": "media_type",
+          "type": "MediaType",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_title": {
+          "name": "media_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "media_poster": {
+          "name": "media_poster",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "recommendations_sender_id_receiver_id_media_id_unique": {
+          "name": "recommendations_sender_id_receiver_id_media_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "sender_id",
+            "receiver_id",
+            "media_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.watchlist": {
       "name": "watchlist",
       "schema": "",
@@ -15,27 +218,27 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "mediaId": {
-          "name": "mediaId",
+        "media_id": {
+          "name": "media_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "mediaType": {
-          "name": "mediaType",
+        "media_type": {
+          "name": "media_type",
           "type": "MediaType",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "mediaTitle": {
-          "name": "mediaTitle",
+        "media_title": {
+          "name": "media_title",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "mediaPoster": {
-          "name": "mediaPoster",
+        "media_poster": {
+          "name": "media_poster",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -46,13 +249,33 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'plan-to-watch'"
+          "default": "'plan_to_watch'"
         },
-        "userId": {
-          "name": "userId",
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -60,7 +283,12 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {},
+      "checkConstraints": {
+        "rating_range": {
+          "name": "rating_range",
+          "value": "\"watchlist\".\"rating\" >= 1 AND \"watchlist\".\"rating\" <= 10"
+        }
+      },
       "isRLSEnabled": false
     }
   },
@@ -73,13 +301,30 @@
         "tv"
       ]
     },
+    "public.NotificationType": {
+      "name": "NotificationType",
+      "schema": "public",
+      "values": [
+        "friend_request",
+        "recommendation"
+      ]
+    },
     "public.Status": {
       "name": "Status",
       "schema": "public",
       "values": [
-        "plan-to-watch",
+        "plan_to_watch",
         "watching",
         "watched"
+      ]
+    },
+    "public.friendshipStatus": {
+      "name": "friendshipStatus",
+      "schema": "public",
+      "values": [
+        "pending",
+        "accepted",
+        "rejected"
       ]
     }
   },
