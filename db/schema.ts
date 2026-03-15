@@ -36,7 +36,10 @@ export const watchlistTable = pgTable(
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => [
-    check("rating_range", sql`${table.rating} >= 1 AND ${table.rating} <= 10`),
+    check(
+      "rating_range",
+      sql`${table.rating} IS NULL OR (${table.rating} >= 1 AND ${table.rating} <= 10)`
+    ),
   ]
 )
 

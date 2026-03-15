@@ -10,7 +10,7 @@ import Image from "next/image"
 import type { MovieDetails, TvShowDetails } from "tmdb-ts"
 import SectionHeader from "../SectionHeader"
 import { Card } from "../ui/card"
-import MovieActions from "./MovieActions"
+import MediaActions from "./MediaActions"
 import { Suspense } from "react"
 import LoadingSkeleton from "../home/LoadingSkeleton"
 import Recommendations from "./Recommendations"
@@ -109,7 +109,7 @@ export default async function DetailsPage({
           <p>{data.overview}</p>
         </div>
         <Card className="flex flex-1 justify-center p-8">
-          <MovieActions
+          <MediaActions
             mediaDetails={{
               mediaId: data.id.toString(),
               mediaType: type,

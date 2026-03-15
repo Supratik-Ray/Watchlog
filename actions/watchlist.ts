@@ -5,12 +5,15 @@ import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 
 export type WatchStatus = "plan_to_watch" | "watching" | "watched"
+export type WatchRating = number | null
+export type WatchType = "movie" | "tv"
 
 export type WatchData = {
   mediaId: string
-  mediaType: "movie" | "tv"
+  mediaType: WatchType
   mediaTitle: string
   mediaPoster: string | undefined
+  rating: WatchRating
   status: WatchStatus
 }
 
