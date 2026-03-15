@@ -62,3 +62,11 @@ export async function updateFriendshipStatus(
     return { success: false, message: "Error updating friendship status!" }
   }
 }
+
+export async function removeFriend(friendshipId: string) {
+  try {
+    await db
+      .delete(friendshipsTable)
+      .where(eq(friendshipsTable.id, friendshipId))
+  } catch (error) {}
+}

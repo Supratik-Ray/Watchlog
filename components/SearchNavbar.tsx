@@ -100,6 +100,7 @@ export default function SearchNavbar() {
               <Input
                 placeholder="search titles"
                 className="w-full py-5 pl-10"
+                value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 ref={searchInputRef}
               />

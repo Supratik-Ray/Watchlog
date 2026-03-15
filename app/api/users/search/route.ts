@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server"
 import { NextRequest } from "next/server"
 
-export default async function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const query = searchParams.get("query")
 
