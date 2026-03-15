@@ -43,6 +43,8 @@ export const watchlistTable = pgTable(
   ]
 )
 
+export type WatchListItem = typeof watchlistTable.$inferSelect
+
 export const friendshipStatusEnum = pgEnum("friendshipStatus", [
   "pending",
   "accepted",
