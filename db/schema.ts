@@ -64,6 +64,7 @@ export const friendshipsTable = pgTable(
   (table) => [unique().on(table.senderId, table.receiverId)]
 )
 
+//QUESTION: IF friend removed from friendship table , recommendation should be removed too?
 export const recommendationsTable = pgTable(
   "recommendations",
   {

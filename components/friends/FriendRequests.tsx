@@ -43,6 +43,9 @@ export default async function FriendRequests() {
   return (
     <section className="container mx-auto mb-12">
       <SectionHeader>Friend Requests ({totalFriendRequests})</SectionHeader>
+      {totalFriendRequests === 0 && (
+        <p className="text-muted-foreground">No available friend requests!</p>
+      )}
       <div className="grid grid-cols-4 gap-4">
         {friendRequestsWithUser.map((req) => {
           return (

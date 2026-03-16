@@ -25,9 +25,13 @@ export default function AddFriendRequest({ friendId }: { friendId: string }) {
 
   function handleAddFriend() {
     startTransition(async () => {
-      await SendFriendRequest(friendId)
+      const res = await SendFriendRequest(friendId)
       setOpen(false)
-      toast.success("Friend request sent successfully!")
+      if (res.success) {
+        toast.success(res.message)
+      } else {
+        toast.error(res.message)
+      }
     })
   }
   return (

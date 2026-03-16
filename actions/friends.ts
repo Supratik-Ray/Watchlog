@@ -4,13 +4,36 @@ import { friendshipsTable, notificationsTable } from "@/db/schema"
 import { db } from "@/lib/db"
 import { pusher } from "@/lib/pusher/server"
 import { auth } from "@clerk/nextjs/server"
-import { eq } from "drizzle-orm"
+import { and, eq, or } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
 
 export async function SendFriendRequest(receiverId: string) {
   try {
     const { userId } = await auth()
     if (!userId) return { success: false, message: "unauthorized!" }
 
+    // check if friendship already exists in either direction
+    const existing = await db
+      .select()
+      .from(friendshipsTable)
+      .where(
+        or(
+          and(
+            eq(friendshipsTable.senderId, userId),
+            eq(friendshipsTable.receiverId, receiverId)
+          ),
+          and(
+            eq(friendshipsTable.senderId, receiverId),
+            eq(friendshipsTable.receiverId, userId)
+          )
+        )
+      )
+      .limit(1)
+
+    if (existing.length > 0)
+      return { success: false, message: "Friend request already exists" }
+
+    //insert into friendship table
     const [friendship] = await db
       .insert(friendshipsTable)
       .values({
@@ -19,6 +42,7 @@ export async function SendFriendRequest(receiverId: string) {
       })
       .returning()
 
+    //insert into notification table
     const [notification] = await db
       .insert(notificationsTable)
       .values({
@@ -28,6 +52,7 @@ export async function SendFriendRequest(receiverId: string) {
       })
       .returning()
 
+    //dispatch nofification to the receiver
     await pusher.trigger(`private-user-${receiverId}`, "notification", {
       id: notification.id,
       type: "friend_request",
@@ -51,6 +76,8 @@ export async function updateFriendshipStatus(
       .set({ status })
       .where(eq(friendshipsTable.id, friendShipId))
 
+    revalidatePath("/friends")
+
     return {
       success: true,
       message:
@@ -68,5 +95,14 @@ export async function removeFriend(friendshipId: string) {
     await db
       .delete(friendshipsTable)
       .where(eq(friendshipsTable.id, friendshipId))
-  } catch (error) {}
+
+    revalidatePath("/friends")
+
+    return { success: true, message: "removed user from friends successfully!" }
+  } catch (error) {
+    return {
+      success: false,
+      message: "error removing user from friends!",
+    }
+  }
 }
