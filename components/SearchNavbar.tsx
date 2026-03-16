@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Input } from "./ui/input"
-import { BellIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
+import { MagnifyingGlassIcon } from "@phosphor-icons/react"
 import { useEffect, useRef, useState } from "react"
 import { NormalizedMedia } from "@/types/normalized"
 import Image from "next/image"
@@ -11,7 +11,6 @@ import { Spinner } from "./ui/spinner"
 import { useRouter } from "next/navigation"
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 import NotificationArea from "./NotificationArea"
-import { auth } from "@clerk/nextjs/server"
 
 export default function SearchNavbar() {
   const [query, setQuery] = useState("")

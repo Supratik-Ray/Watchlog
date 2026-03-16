@@ -12,7 +12,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import AddFriendRequest from "@/components/friends/AddFriendRequest"
+import AddFriendRequestButton from "@/components/friends/AddFriendRequestButton"
+import UserProfileActions from "@/components/friends/UserProfileActions"
+import { Suspense } from "react"
 
 //TODO: later separate out watchlist and user data fetching into different components
 
@@ -53,7 +55,9 @@ export default async function FriendProfile({
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <AddFriendRequest friendId={friendId} />
+              <Suspense fallback={"Loading..."}>
+                <UserProfileActions profileId={friendId} />
+              </Suspense>
             </CardFooter>
           </div>
         </Card>

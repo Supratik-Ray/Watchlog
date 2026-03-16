@@ -36,7 +36,7 @@ export async function SendFriendRequest(receiverId: string) {
 
     //insert into friendship table if no entry or else update entry if had a rejected entry
     let friendship
-    if (existing[0].status === "rejected") {
+    if (existing[0]?.status === "rejected") {
       const [friendshipItem] = await db
         .update(friendshipsTable)
         .set({ status: "pending" })
@@ -72,6 +72,7 @@ export async function SendFriendRequest(receiverId: string) {
     })
     return { success: true, message: "Sent friend request!" }
   } catch (error) {
+    console.log(error)
     return { success: false, message: "Couldn't send friend request!" }
   }
 }
@@ -88,6 +89,7 @@ export async function updateFriendshipStatus(
       .set({ status })
       .where(eq(friendshipsTable.id, friendShipId))
 
+    revalidatePath("/friends/[friendId]", "page")
     revalidatePath("/friends")
 
     return {

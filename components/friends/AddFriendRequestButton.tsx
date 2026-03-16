@@ -19,7 +19,11 @@ import { useState, useTransition } from "react"
 import { SendFriendRequest } from "@/actions/friends"
 import toast from "react-hot-toast"
 
-export default function AddFriendRequest({ friendId }: { friendId: string }) {
+export default function AddFriendRequestButton({
+  friendId,
+}: {
+  friendId: string
+}) {
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 

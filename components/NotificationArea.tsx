@@ -10,17 +10,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import toast from "react-hot-toast"
+import { User } from "./friends/UserSearch"
+import { useRouter } from "next/navigation"
 
 type Notification = {
   id: string
   type: "friend_request" | "recommendation"
   senderId: string
+  user: User
 }
 
 export default function NotificationArea() {
   const { user, isLoaded } = useUser()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
+  const router = useRouter()
 
   useEffect(() => {
     if (!isLoaded || !user) return
@@ -33,10 +37,11 @@ export default function NotificationArea() {
       setNotifications((prev) => [{ ...data, user }, ...prev])
       setUnreadCount((c) => c + 1)
       toast.success(`new ${data.type.replaceAll("_", " ")}`)
+      router.refresh()
     })
 
     return () => pusher.unsubscribe(`private-user-${user.id}`)
-  }, [user, isLoaded])
+  }, [user, isLoaded, router])
 
   function handleOpen() {
     // clear badge count when opened
