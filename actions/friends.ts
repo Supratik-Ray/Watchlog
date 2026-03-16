@@ -30,17 +30,29 @@ export async function SendFriendRequest(receiverId: string) {
       )
       .limit(1)
 
-    if (existing.length > 0)
+    if (existing.length > 0 && existing[0].status !== "rejected") {
       return { success: false, message: "Friend request already exists" }
+    }
 
-    //insert into friendship table
-    const [friendship] = await db
-      .insert(friendshipsTable)
-      .values({
-        senderId: userId,
-        receiverId,
-      })
-      .returning()
+    //insert into friendship table if no entry or else update entry if had a rejected entry
+    let friendship
+    if (existing[0].status === "rejected") {
+      const [friendshipItem] = await db
+        .update(friendshipsTable)
+        .set({ status: "pending" })
+        .where(eq(friendshipsTable.id, existing[0].id))
+        .returning()
+      friendship = friendshipItem
+    } else {
+      const [friendshipItem] = await db
+        .insert(friendshipsTable)
+        .values({
+          senderId: userId,
+          receiverId,
+        })
+        .returning()
+      friendship = friendshipItem
+    }
 
     //insert into notification table
     const [notification] = await db
