@@ -10,6 +10,8 @@ import { getImageUrl } from "@/lib/getImageUrl"
 import { Spinner } from "./ui/spinner"
 import { useRouter } from "next/navigation"
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import NotificationArea from "./NotificationArea"
+import { auth } from "@clerk/nextjs/server"
 
 export default function SearchNavbar() {
   const [query, setQuery] = useState("")
@@ -134,9 +136,8 @@ export default function SearchNavbar() {
             )}
           </div>
 
-          <span>
-            <BellIcon size={23} />
-          </span>
+          <NotificationArea />
+
           {/* clerk auth components */}
           <div>
             <Show when="signed-out">
