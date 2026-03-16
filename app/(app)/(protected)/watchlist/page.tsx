@@ -1,9 +1,8 @@
-import { DataTable } from "@/components/watchlist/data-table"
-import { columns } from "@/components/watchlist/columns"
 import { db } from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { watchlistTable } from "@/db/schema"
 import { eq } from "drizzle-orm"
+import WatchlistTable from "@/components/watchlist/WatchlistTable"
 
 export default async function WatchlistPage() {
   const { userId } = await auth()
@@ -15,7 +14,7 @@ export default async function WatchlistPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
+      <WatchlistTable data={data} hideActions={false} />
     </div>
   )
 }
