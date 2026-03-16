@@ -10,39 +10,59 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "../ui/button"
 import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react/dist/ssr"
+import { db } from "@/lib/db"
+import { and, eq } from "drizzle-orm"
+import { friendshipsTable } from "@/db/schema"
+import { auth, clerkClient } from "@clerk/nextjs/server"
+import FriendRequestActions from "./FriendRequestActions"
 
 export default async function FriendRequests() {
-  const res = await fetch("https://dummyjson.com/users")
-  const data = await res.json()
-  // console.log(data)
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error("Unathorized to access")
+  }
+
+  const friendRequests = await db.query.friendshipsTable.findMany({
+    where: and(
+      eq(friendshipsTable.receiverId, userId),
+      eq(friendshipsTable.status, "pending")
+    ),
+  })
+
+  const friendRequestsWithUser = await Promise.all(
+    friendRequests.map(async (req) => {
+      const client = await clerkClient()
+      const user = await client.users.getUser(req.senderId)
+      return { ...req, user }
+    })
+  )
+
+  const totalFriendRequests = friendRequestsWithUser.length
+
   return (
     <section className="container mx-auto mb-12">
-      <SectionHeader>Friend Requests (4)</SectionHeader>
+      <SectionHeader>Friend Requests ({totalFriendRequests})</SectionHeader>
       <div className="grid grid-cols-4 gap-4">
-        {data.users?.slice(0, 4).map((user) => {
+        {friendRequestsWithUser.map((req) => {
           return (
-            <Card key={user.id}>
+            <Card key={req.id}>
               <CardHeader>
                 <div className="flex justify-center">
                   <Avatar size="lg">
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarImage src={req.user.imageUrl} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </div>
-                <CardTitle className="text-center">{user.firstName}</CardTitle>
+                <CardTitle className="text-center">
+                  {req.user.fullName}
+                </CardTitle>
                 <CardDescription className="text-center">
-                  @testUsername
+                  {req.user.username ?? "@no-username"}
                 </CardDescription>
               </CardHeader>
               <CardFooter className="flex justify-center gap-4">
-                <Button className="cursor-pointer bg-green-600 hover:bg-green-800">
-                  <CheckCircleIcon size={20} />
-                  Accept
-                </Button>
-                <Button variant="destructive" className="cursor-pointer">
-                  <XCircleIcon size={20} />
-                  Reject
-                </Button>
+                <FriendRequestActions friendshipId={req.id} />
               </CardFooter>
             </Card>
           )
