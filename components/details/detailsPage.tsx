@@ -14,6 +14,7 @@ import MediaActions from "./MediaActions"
 import { Suspense } from "react"
 import LoadingSkeleton from "../home/LoadingSkeleton"
 import Recommendations from "./Recommendations"
+import { auth } from "@clerk/nextjs/server"
 
 export default async function DetailsPage({
   params,
@@ -23,6 +24,7 @@ export default async function DetailsPage({
   type: "movie" | "tv"
 }) {
   const { id } = await params
+  const { userId } = await auth()
 
   const data =
     type === "movie"
@@ -109,14 +111,20 @@ export default async function DetailsPage({
           <p>{data.overview}</p>
         </div>
         <Card className="flex flex-1 justify-center p-8">
-          <MediaActions
-            mediaDetails={{
-              mediaId: data.id.toString(),
-              mediaType: type,
-              mediaTitle: title,
-              mediaPoster: data.poster_path,
-            }}
-          />
+          {userId ? (
+            <MediaActions
+              mediaDetails={{
+                mediaId: data.id.toString(),
+                mediaType: type,
+                mediaTitle: title,
+                mediaPoster: data.poster_path,
+              }}
+            />
+          ) : (
+            <p className="text-center text-muted-foreground">
+              Login to add to watchlist!
+            </p>
+          )}
         </Card>
       </section>
 

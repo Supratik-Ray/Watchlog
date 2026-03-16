@@ -27,6 +27,7 @@ import {
 } from "@/actions/watchlist"
 import { useState, useTransition } from "react"
 import toast from "react-hot-toast"
+import RecommendButton from "./RecommendButton"
 
 type MediaDetails = Omit<WatchData, "status" | "rating">
 
@@ -115,13 +116,7 @@ export default function MediaActions({
           </Button>
         </DialogContent>
       </Dialog>
-      <Button
-        variant="ghost"
-        className="cursor-pointer border-2 border-chart-3 text-chart-3 hover:text-chart-3"
-        size="lg"
-      >
-        <PaperPlaneRightIcon className="text-chart-3" /> Recommend to a friend
-      </Button>
+      <RecommendButton />
     </>
   )
 }
