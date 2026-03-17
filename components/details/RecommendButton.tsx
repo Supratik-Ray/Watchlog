@@ -14,12 +14,25 @@ import {
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { Spinner } from "../ui/spinner"
-import { Card } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+
+type Friendship = {
+  id: string
+  receiverId: string
+  senderId: string
+  status: "pending" | "accepted" | "rejected"
+  friend: {
+    id: string
+    imageUrl: string
+    firstName: string
+    lastName: string
+    username: string
+  }
+}
 
 export default function RecommendButton() {
   const [open, setOpen] = useState(false)
-  const [friendships, setFriendships] = useState([])
+  const [friendships, setFriendships] = useState<Friendship[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
