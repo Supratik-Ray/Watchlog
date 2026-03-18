@@ -19,17 +19,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  addToWatchList,
-  WatchData,
-  WatchRating,
-  WatchStatus,
-} from "@/actions/watchlist"
+import { addToWatchList, WatchData, WatchStatus } from "@/actions/watchlist"
 import { useState, useTransition } from "react"
 import toast from "react-hot-toast"
 import RecommendButton from "./RecommendButton"
-
-type MediaDetails = Omit<WatchData, "status" | "rating">
+import { MediaDetails } from "@/types/types"
 
 export default function MediaActions({
   mediaDetails,
@@ -116,7 +110,7 @@ export default function MediaActions({
           </Button>
         </DialogContent>
       </Dialog>
-      <RecommendButton />
+      <RecommendButton media={mediaDetails} />
     </>
   )
 }

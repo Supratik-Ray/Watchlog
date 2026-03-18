@@ -11,29 +11,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import toast from "react-hot-toast"
 import { Spinner } from "../ui/spinner"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { MediaDetails, Friendship } from "@/types/types"
+import { sendRecommendation } from "@/actions/recommendation"
 
-type Friendship = {
-  id: string
-  receiverId: string
-  senderId: string
-  status: "pending" | "accepted" | "rejected"
-  friend: {
-    id: string
-    imageUrl: string
-    firstName: string
-    lastName: string
-    username: string
-  }
-}
-
-export default function RecommendButton() {
+export default function RecommendButton({ media }: { media: MediaDetails }) {
   const [open, setOpen] = useState(false)
   const [friendships, setFriendships] = useState<Friendship[]>([])
   const [loading, setLoading] = useState(false)
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([])
+  const [isPending, startTransition] = useTransition()
+
+  function handleSubmit() {
+    startTransition(async () => {
+      try {
+        await sendRecommendation({ friends: selectedFriends, media })
+        setOpen(false)
+        toast.success("Successfully sent recommendation!")
+      } catch (error) {
+        toast.error("Failed to send recommendation!")
+      }
+    })
+  }
 
   useEffect(() => {
     //fetch friend list only when dialog open
@@ -85,7 +87,16 @@ export default function RecommendButton() {
                   key={friendship.id}
                   className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-muted"
                 >
-                  <Checkbox />
+                  <Checkbox
+                    checked={selectedFriends.includes(friendship.friend.id)}
+                    onCheckedChange={(checked) =>
+                      setSelectedFriends((prev) =>
+                        checked
+                          ? [...prev, friendship.friend.id]
+                          : prev.filter((item) => item !== friendship.friend.id)
+                      )
+                    }
+                  />
                   <Avatar size="lg">
                     <AvatarImage src={friendship.friend.imageUrl} />
                     <AvatarFallback>
@@ -110,7 +121,13 @@ export default function RecommendButton() {
           {/* <Button onClick={() => setOpen(false)} variant="destructive">
             Close
           </Button> */}
-          <Button className="w-full">Send</Button>
+          <Button
+            className="w-full"
+            onClick={handleSubmit}
+            disabled={isPending}
+          >
+            {isPending ? "Sending..." : "Send"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
