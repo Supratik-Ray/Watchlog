@@ -12,7 +12,6 @@ import {
 } from "../ui/card"
 import Image from "next/image"
 import { getImageUrl } from "@/lib/getImageUrl"
-import { ReceiptIcon } from "@phosphor-icons/react"
 import { Badge } from "../ui/badge"
 import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "../ui/button"
