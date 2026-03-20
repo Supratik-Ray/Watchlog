@@ -57,7 +57,15 @@ export default function RecommendButton({ media }: { media: MediaDetails }) {
   }, [open])
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          setSelectedFriends([])
+        }
+        setOpen(open)
+      }}
+    >
       <Button
         onClick={() => setOpen(true)}
         variant="ghost"
@@ -96,23 +104,33 @@ export default function RecommendButton({ media }: { media: MediaDetails }) {
                           : prev.filter((item) => item !== friendship.friend.id)
                       )
                     }
+                    id={friendship.friend.id}
+                    className="cursor-pointer"
                   />
-                  <Avatar size="lg">
-                    <AvatarImage src={friendship.friend.imageUrl} />
-                    <AvatarFallback>
-                      {[friendship.friend.firstName, friendship.friend.lastName]
-                        .map((word) => word[0].toUpperCase())
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h3>
-                    {friendship.friend.firstName} {friendship.friend.lastName}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {friendship.friend.username
-                      ? `@${friendship.friend.username}`
-                      : "@no-username"}
-                  </p>
+                  <label
+                    htmlFor={friendship.friend.id}
+                    className="flex cursor-pointer items-center gap-3"
+                  >
+                    <Avatar size="lg">
+                      <AvatarImage src={friendship.friend.imageUrl} />
+                      <AvatarFallback>
+                        {[
+                          friendship.friend.firstName,
+                          friendship.friend.lastName,
+                        ]
+                          .map((word) => word[0].toUpperCase())
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <h3>
+                      {friendship.friend.firstName} {friendship.friend.lastName}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {friendship.friend.username
+                        ? `@${friendship.friend.username}`
+                        : "@no-username"}
+                    </p>
+                  </label>
                 </div>
               )
             })}

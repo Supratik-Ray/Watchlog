@@ -4,6 +4,8 @@ import { db } from "@/lib/db"
 import { pusher } from "@/lib/pusher/server"
 import { MediaDetails } from "@/types/types"
 import { auth } from "@clerk/nextjs/server"
+import { eq } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
 
 type SendRecommendationInput = {
   friends: string[]
@@ -45,9 +47,21 @@ export async function sendRecommendation(data: SendRecommendationInput) {
     notificationEntries.map((entry) =>
       pusher.trigger(`private-user-${entry.userId}`, "notification", {
         id: entry.id,
-        type: "friend_request",
+        type: "recommendation",
         senderId: userId,
       })
     )
   )
+}
+
+export async function deleteRecommendation(recommendationId: string) {
+  try {
+    await db
+      .delete(recommendationsTable)
+      .where(eq(recommendationsTable.id, recommendationId))
+    revalidatePath("/friends")
+    return { success: true, message: "Successfully deleted recommendation" }
+  } catch (error) {
+    return { success: false, message: "Couldn't delete recommendation" }
+  }
 }

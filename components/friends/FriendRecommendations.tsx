@@ -13,9 +13,9 @@ import {
 import Image from "next/image"
 import { getImageUrl } from "@/lib/getImageUrl"
 import { Badge } from "../ui/badge"
-import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "../ui/button"
 import Link from "next/link"
+import RecommendationDeleteButton from "./RecommendationDeleteButton"
 
 export default async function FriendRecommendations() {
   const { userId } = await auth()
@@ -46,7 +46,7 @@ export default async function FriendRecommendations() {
           No available recommendations from friends.
         </p>
       ) : (
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-2">
           {recommendationsWithUserInfo.map((recommendation) => (
             <Card key={recommendation.id} className="p-0">
               <div className="flex">
@@ -62,19 +62,14 @@ export default async function FriendRecommendations() {
                   <CardHeader className="block flex-1 gap-0 p-0">
                     <div className="mb-2 flex justify-between">
                       <Badge>{recommendation.mediaType}</Badge>
-                      <span>
-                        <TrashIcon size={20} color="red" />
-                      </span>
+                      <RecommendationDeleteButton id={recommendation.id} />
                     </div>
                     <div className="space-y-2">
                       <CardTitle className="text-xl">
                         {recommendation.mediaTitle}
                       </CardTitle>
                       <CardDescription>
-                        Sent by
-                        {recommendation.friend.firstName +
-                          " " +
-                          recommendation.friend.lastName}
+                        {`Sent by ${recommendation.friend.firstName} ${recommendation.friend.lastName}`}
                       </CardDescription>
                     </div>
                   </CardHeader>
