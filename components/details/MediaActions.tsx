@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-import { addToWatchList } from "@/actions/watchlist"
+import { addToWatchlist } from "@/actions/watchlist"
 import { useState, useTransition } from "react"
 import toast from "react-hot-toast"
 import RecommendButton from "./RecommendButton"
@@ -22,13 +22,13 @@ export default function MediaActions({
 }: {
   mediaDetails: MediaDetails
 }) {
-  const [dropdownContent, status, rating] = useSelectMediaStatus()
+  const { dropdownContent, status, rating, reset } = useSelectMediaStatus()
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
 
   function handleAdd() {
     startTransition(async () => {
-      const result = await addToWatchList({
+      const result = await addToWatchlist({
         ...mediaDetails,
         status,
         rating: status === "watched" ? rating : null,
@@ -46,7 +46,15 @@ export default function MediaActions({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(open) => {
+          if (!open) {
+            reset()
+          }
+          setOpen(open)
+        }}
+      >
         <Button
           className="cursor-pointer"
           size="lg"

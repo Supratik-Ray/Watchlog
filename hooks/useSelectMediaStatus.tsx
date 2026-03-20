@@ -13,6 +13,11 @@ import { useState } from "react"
 export default function useSelectMediaStatus() {
   const [status, setStatus] = useState<WatchStatus>("plan_to_watch")
   const [rating, setRating] = useState<number>(1)
+
+  function reset() {
+    setStatus("plan_to_watch")
+    setRating(1)
+  }
   const dropdownContent = (
     <>
       <Select
@@ -54,5 +59,5 @@ export default function useSelectMediaStatus() {
     </>
   )
 
-  return [dropdownContent, status, rating] as const
+  return { dropdownContent, status, rating, reset } as const
 }

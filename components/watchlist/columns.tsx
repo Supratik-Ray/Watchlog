@@ -22,16 +22,44 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 
 import { DotsThreeIcon } from "@phosphor-icons/react"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "../ui/button"
+import useSelectMediaStatus from "@/hooks/useSelectMediaStatus"
+import { deleteWatchlistItem, updateWatchlistItem } from "@/actions/watchlist"
+import toast from "react-hot-toast"
+import { Spinner } from "../ui/spinner"
 
 function ActionCell({ row }: { row: Row<WatchListItem> }) {
   const item = row.original
   const [action, setAction] = useState<"edit" | "delete" | null>(null)
+  const { dropdownContent, status, rating, reset } = useSelectMediaStatus()
+  const [isPending, startTransition] = useTransition()
+
+  function handleAction() {
+    startTransition(async () => {
+      let result
+      if (action === "edit") {
+        result = await updateWatchlistItem({ status, rating }, item.id)
+      }
+      if (action === "delete") {
+        result = await deleteWatchlistItem(item.id)
+      }
+
+      if (result?.success) {
+        toast.success(result.message)
+      }
+
+      if (result && !result?.success) {
+        toast.error(result.message)
+      }
+
+      setAction(null)
+      reset()
+    })
+  }
   return (
     <>
       <DropdownMenu>
@@ -54,7 +82,12 @@ function ActionCell({ row }: { row: Row<WatchListItem> }) {
 
       <Dialog
         open={action !== null}
-        onOpenChange={(open) => !open && setAction(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setAction(null)
+            reset()
+          }
+        }}
       >
         <DialogContent>
           {action === "edit" && (
@@ -65,7 +98,16 @@ function ActionCell({ row }: { row: Row<WatchListItem> }) {
                   Update the details for this item.
                 </DialogDescription>
               </DialogHeader>
-              {/* Your edit form here */}
+              {dropdownContent}
+              <Button onClick={handleAction} disabled={isPending}>
+                {isPending ? (
+                  <span className="flex items-center gap-2">
+                    Updating <Spinner fontSize={23} />
+                  </span>
+                ) : (
+                  "Update"
+                )}
+              </Button>
             </>
           )}
 
@@ -78,7 +120,20 @@ function ActionCell({ row }: { row: Row<WatchListItem> }) {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button>Delete</Button>
+                <Button
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={handleAction}
+                  disabled={isPending}
+                >
+                  {isPending ? (
+                    <span className="flex items-center gap-2">
+                      Deleting <Spinner fontSize={23} />
+                    </span>
+                  ) : (
+                    "Delete"
+                  )}
+                </Button>
               </DialogFooter>
             </>
           )}
