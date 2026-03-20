@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { PaperPlaneRightIcon, PlusIcon } from "@phosphor-icons/react"
+import { PlusIcon } from "@phosphor-icons/react"
 
 import {
   Dialog,
@@ -10,30 +10,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { addToWatchList, WatchData, WatchStatus } from "@/actions/watchlist"
+import { addToWatchList } from "@/actions/watchlist"
 import { useState, useTransition } from "react"
 import toast from "react-hot-toast"
 import RecommendButton from "./RecommendButton"
 import { MediaDetails } from "@/types/types"
+import useSelectMediaStatus from "../../hooks/useSelectMediaStatus"
 
 export default function MediaActions({
   mediaDetails,
 }: {
   mediaDetails: MediaDetails
 }) {
+  const [dropdownContent, status, rating] = useSelectMediaStatus()
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
-  const [status, setStatus] = useState<WatchStatus>("plan_to_watch")
-  const [rating, setRating] = useState<number>(1)
 
   function handleAdd() {
     startTransition(async () => {
@@ -69,42 +60,7 @@ export default function MediaActions({
           <DialogHeader>
             <DialogTitle>Select Watch Status</DialogTitle>
           </DialogHeader>
-          <Select
-            value={status}
-            onValueChange={(value) => setStatus(value as WatchStatus)}
-          >
-            <SelectTrigger className="w-full max-w-48">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="plan_to_watch">Plan to watch</SelectItem>
-                <SelectItem value="watching">Watching</SelectItem>
-                <SelectItem value="watched">Watched</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          {status === "watched" && (
-            <Select
-              value={`${rating}`}
-              onValueChange={(value) => setRating(+value)}
-            >
-              <SelectTrigger className="w-full max-w-48">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Rating</SelectLabel>
-                  {Array.from({ length: 10 }).map((_, i) => (
-                    <SelectItem key={i} value={`${i + 1}`}>
-                      {i + 1}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          )}
+          {dropdownContent}
           <Button onClick={handleAdd} disabled={isPending}>
             {isPending ? "Adding..." : "Add to List"}
           </Button>

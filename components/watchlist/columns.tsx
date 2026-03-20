@@ -2,9 +2,8 @@
 
 import { WatchListItem } from "@/db/schema"
 import { getImageUrl } from "@/lib/getImageUrl"
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Row } from "@tanstack/react-table"
 import Image from "next/image"
-import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
 import { cn } from "@/lib/utils"
 
@@ -13,10 +12,81 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { DotsThreeIcon } from "@phosphor-icons/react"
+import { useState } from "react"
+import { Button } from "../ui/button"
+
+function ActionCell({ row }: { row: Row<WatchListItem> }) {
+  const item = row.original
+  const [action, setAction] = useState<"edit" | "delete" | null>(null)
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <DotsThreeIcon size={23} />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" side="right">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => setAction("edit")}>
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="text-red-500"
+            onClick={() => setAction("delete")}
+          >
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog
+        open={action !== null}
+        onOpenChange={(open) => !open && setAction(null)}
+      >
+        <DialogContent>
+          {action === "edit" && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Edit {item.mediaTitle}</DialogTitle>
+                <DialogDescription>
+                  Update the details for this item.
+                </DialogDescription>
+              </DialogHeader>
+              {/* Your edit form here */}
+            </>
+          )}
+
+          {action === "delete" && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Delete {item.mediaTitle}?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button>Delete</Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
 
 export function getColumns(hideactions = false): ColumnDef<WatchListItem>[] {
   const base: ColumnDef<WatchListItem>[] = [
@@ -87,18 +157,7 @@ export function getColumns(hideactions = false): ColumnDef<WatchListItem>[] {
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <DotsThreeIcon size={23} />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" side="right">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
+      cell: ({ row }) => <ActionCell row={row} />,
     },
   ]
 }

@@ -140,11 +140,17 @@ export default function RecommendButton({ media }: { media: MediaDetails }) {
             Close
           </Button> */}
           <Button
-            className="w-full"
+            className="w-full cursor-pointer"
             onClick={handleSubmit}
             disabled={isPending}
           >
-            {isPending ? "Sending..." : "Send"}
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                Sending <Spinner fontSize={23} />
+              </span>
+            ) : (
+              "Send"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
