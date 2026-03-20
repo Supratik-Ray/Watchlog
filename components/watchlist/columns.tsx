@@ -35,7 +35,10 @@ import { Spinner } from "../ui/spinner"
 function ActionCell({ row }: { row: Row<WatchListItem> }) {
   const item = row.original
   const [action, setAction] = useState<"edit" | "delete" | null>(null)
-  const { dropdownContent, status, rating, reset } = useSelectMediaStatus()
+  const { dropdownContent, status, rating, reset } = useSelectMediaStatus({
+    status: item.status,
+    rating: item.rating,
+  })
   const [isPending, startTransition] = useTransition()
 
   function handleAction() {

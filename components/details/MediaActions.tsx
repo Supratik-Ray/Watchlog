@@ -22,7 +22,7 @@ export default function MediaActions({
 }: {
   mediaDetails: MediaDetails
 }) {
-  const { dropdownContent, status, rating, reset } = useSelectMediaStatus()
+  const { dropdownContent, status, rating, reset } = useSelectMediaStatus({})
   const [isPending, startTransition] = useTransition()
   const [open, setOpen] = useState(false)
 

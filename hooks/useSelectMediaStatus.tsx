@@ -10,9 +10,17 @@ import {
 } from "@/components/ui/select"
 import { useState } from "react"
 
-export default function useSelectMediaStatus() {
-  const [status, setStatus] = useState<WatchStatus>("plan_to_watch")
-  const [rating, setRating] = useState<number>(1)
+export default function useSelectMediaStatus(initialState: {
+  status?: WatchStatus
+  rating?: number | null
+}) {
+  const [status, setStatus] = useState<WatchStatus>(
+    initialState.status ? initialState.status : "plan_to_watch"
+  )
+
+  const [rating, setRating] = useState<number>(
+    initialState.rating ? initialState.rating : 1
+  )
 
   function reset() {
     setStatus("plan_to_watch")

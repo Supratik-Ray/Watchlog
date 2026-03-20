@@ -31,15 +31,20 @@ export async function addToWatchlist(watchData: WatchData) {
   }
 }
 export async function updateWatchlistItem(
-  watchData: Partial<WatchData>,
+  updatePayload: Partial<WatchData>,
   id: string
 ) {
   try {
     const { userId } = await auth()
     if (!userId) return { success: false, message: "Unauthorized!" }
+    //if try to update to status other than watched , then also revert back rating to null
     await db
       .update(watchlistTable)
-      .set(watchData)
+      .set({
+        ...updatePayload,
+        rating:
+          updatePayload.status !== "watched" ? null : updatePayload.rating,
+      })
       .where(eq(watchlistTable.id, id))
     revalidatePath("/watchlist")
     return { success: true, message: "Successfully updated item!" }
