@@ -105,6 +105,12 @@ export default function SearchNavbar() {
             >
               Friends
             </Link>
+            <Link
+              href="/browse"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Browse
+            </Link>
           </div>
         </div>
 
@@ -282,6 +288,13 @@ export default function SearchNavbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Friends
+            </Link>
+            <Link
+              href="/browse"
+              className="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-muted"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Browse
             </Link>
             <Show when="signed-out">
               <div className="mt-2 border-t pt-3">

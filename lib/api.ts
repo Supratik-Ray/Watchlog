@@ -73,7 +73,7 @@ export async function getByGenre(
   genreId: string,
   page: number
 ) {
-  const url = `${process.env.TMDB_BASE_URL}/discover/${type}?with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
+  const url = `${process.env.TMDB_BASE_URL}/discover/${type}?with_genres=${genreId}&sort_by=popularity.desc&page=${page ?? 1}`
   const res = await fetch(url, options)
   const data = await res.json()
   return data
