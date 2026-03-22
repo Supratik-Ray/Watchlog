@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react"
 import { Spinner } from "../ui/spinner"
 import { Card } from "../ui/card"
 import SectionHeader from "../SectionHeader"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 
@@ -31,7 +30,6 @@ export default function UserSearch() {
       setHasSearched(false)
     }
     document.addEventListener("click", handleClearResults)
-
     return () => removeEventListener("click", handleClearResults)
   }, [controllerRef])
 
@@ -67,60 +65,68 @@ export default function UserSearch() {
   }, [query])
 
   return (
-    <section className="container mx-auto mb-12">
+    <section className="mb-10">
       <SectionHeader>Discover new friends</SectionHeader>
-      <Card className="flex items-center justify-center overflow-visible p-8">
-        <div className="relative mb-2">
-          <div className="relative w-100">
+      <Card className="overflow-visible p-6 sm:p-8">
+        <div className="relative mx-auto w-full max-w-lg">
+          <div className="relative">
             <MagnifyingGlassIcon
-              className="absolute top-1/2 left-3 -translate-y-1/2"
-              size={20}
+              className="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
+              size={18}
             />
             <Input
               value={query}
-              placeholder="search by name or username"
+              placeholder="Search by name or username..."
               className="w-full py-5 pl-10"
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
+
           {loading && (
-            <div className="absolute top-full left-0 z-100 mt-2 w-full rounded-md border bg-popover p-5 shadow-md">
+            <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-md border bg-popover p-5 shadow-md">
               <Spinner className="mx-auto size-7" />
             </div>
           )}
+
           {!loading && hasSearched && users.length === 0 && (
             <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-md border bg-popover px-4 py-6 text-center shadow-md">
               <p className="text-sm text-muted-foreground">
-                No users found for {`'${query}'`}
+                No users found for &lsquo;{query}&rsquo;
               </p>
             </div>
           )}
+
           {!loading && users.length > 0 && (
-            <div className="absolute top-full left-0 z-100 mt-2 w-full rounded-md border bg-popover p-2 shadow-md">
+            <div className="absolute top-full left-0 z-50 mt-2 w-full rounded-md border bg-popover p-2 shadow-md">
               {users.map((user) => (
                 <Link key={user.id} href={`/friends/${user.id}`}>
-                  <div className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 hover:bg-muted">
+                  <div className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 hover:bg-muted">
                     <Avatar size="lg">
                       <AvatarImage src={user.imageUrl} />
                       <AvatarFallback>
                         {user.name
                           .split(" ")
-                          .map((word) => word[0].toUpperCase())
+                          .map((w) => w[0].toUpperCase())
                           .join("")}
                       </AvatarFallback>
                     </Avatar>
-                    <h3>{user.name}</h3>
-                    <p className="text-muted-foreground">
-                      {user.username ? `@${user.username}` : "@no-username"}
-                    </p>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {user.name}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {user.username ? `@${user.username}` : "@no-username"}
+                      </p>
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           )}
         </div>
-        <p className="text-sm text-muted-foreground">
-          Enter a name or username to find other movie lovers on watchlog
+
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          Enter a name or username to find other movie lovers on Watchlog
         </p>
       </Card>
     </section>

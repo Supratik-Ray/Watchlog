@@ -4,19 +4,10 @@ import { eq } from "drizzle-orm"
 import WatchlistTable from "@/components/watchlist/WatchlistTable"
 import { clerkClient } from "@clerk/nextjs/server"
 import SectionHeader from "@/components/SectionHeader"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import AddFriendRequestButton from "@/components/friends/AddFriendRequestButton"
 import UserProfileActions from "@/components/friends/UserProfileActions"
 import { Suspense } from "react"
-
-//TODO: later separate out watchlist and user data fetching into different components
 
 export default async function FriendProfile({
   params,
@@ -32,12 +23,12 @@ export default async function FriendProfile({
   const user = await client.users.getUser(friendId)
 
   return (
-    <div className="py-10">
+    <div className="px-4 py-10 sm:px-6 lg:px-8">
       <section className="container mx-auto mb-12">
         <SectionHeader>Profile</SectionHeader>
         <Card>
-          <div className="flex items-center">
-            <div className="p-8">
+          <div className="flex flex-col items-center gap-4 p-6 sm:flex-row sm:items-center sm:gap-0 sm:p-0">
+            <div className="sm:p-8">
               <Avatar size="xxl">
                 <AvatarImage src={user.imageUrl} />
                 <AvatarFallback>
@@ -48,13 +39,13 @@ export default async function FriendProfile({
                 </AvatarFallback>
               </Avatar>
             </div>
-            <CardHeader className="flex-1">
-              <CardTitle>{user.fullName}</CardTitle>
-              <CardDescription>
+            <div className="flex-1 self-center text-center sm:text-left">
+              <p className="font-semibold">{user.fullName}</p>
+              <p className="text-sm text-muted-foreground">
                 {user.username ? `@${user.username}` : "@no-username"}
-              </CardDescription>
-            </CardHeader>
-            <CardFooter>
+              </p>
+            </div>
+            <CardFooter className="p-0 sm:p-6">
               <Suspense fallback={"Loading..."}>
                 <UserProfileActions profileId={friendId} />
               </Suspense>

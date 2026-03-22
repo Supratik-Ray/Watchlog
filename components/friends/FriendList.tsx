@@ -6,10 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "../ui/button"
-import { ArrowSquareOutIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr"
+import { ArrowSquareOutIcon } from "@phosphor-icons/react/dist/ssr"
 import { db } from "@/lib/db"
 import { and, eq, or } from "drizzle-orm"
 import { friendshipsTable } from "@/db/schema"
@@ -19,7 +18,6 @@ import FriendAction from "./FriendAction"
 
 export default async function FriendList() {
   const { userId } = await auth()
-
   if (!userId) throw new Error("Unauthorized to access")
 
   const friendships = await db.query.friendshipsTable.findMany({
@@ -36,13 +34,10 @@ export default async function FriendList() {
 
   const friendshipsWithFriends = await Promise.all(
     friendships.map(async (friendship) => {
-      let friendId: string
-      if (friendship.receiverId === userId) {
-        friendId = friendship.senderId
-      } else {
-        friendId = friendship.receiverId
-      }
-
+      const friendId =
+        friendship.receiverId === userId
+          ? friendship.senderId
+          : friendship.receiverId
       const friend = await client.users.getUser(friendId)
       return { ...friendship, friend }
     })
@@ -51,47 +46,51 @@ export default async function FriendList() {
   const totalFriends = friendshipsWithFriends.length
 
   return (
-    <section className="container mx-auto mb-12">
+    <section className="mb-10">
       <SectionHeader>Your Friends ({totalFriends})</SectionHeader>
-      <div className="flex flex-col gap-4">
-        {totalFriends === 0 && (
-          <p className="text-muted-foreground">
-            No friends yet. Start adding some!
-          </p>
-        )}
-        {friendshipsWithFriends.map((friendship) => {
-          return (
+      {totalFriends === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          No friends yet. Start adding some!
+        </p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {friendshipsWithFriends.map((friendship) => (
             <Card key={friendship.friend.id}>
-              <div className="flex items-center justify-between px-10">
-                <div className="flex flex-1 items-center">
+              <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+                <div className="flex items-center gap-3">
                   <Avatar size="lg">
                     <AvatarImage src={friendship.friend.imageUrl} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-
-                  <CardHeader className="flex-1">
-                    <CardTitle>{friendship.friend.fullName}</CardTitle>
-                    <CardDescription>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold">
+                      {friendship.friend.fullName}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
                       {friendship.friend.username
                         ? `@${friendship.friend.username}`
                         : "@no-username"}
-                    </CardDescription>
-                  </CardHeader>
+                    </p>
+                  </div>
                 </div>
-                <CardFooter className="flex gap-4">
-                  <Button size="sm" className="cursor-pointer" asChild>
+                <div className="flex gap-2 sm:shrink-0">
+                  <Button
+                    size="sm"
+                    className="flex-1 cursor-pointer sm:flex-none"
+                    asChild
+                  >
                     <Link href={`friends/${friendship.friend.id}`}>
-                      <ArrowSquareOutIcon size={20} />
+                      <ArrowSquareOutIcon size={16} />
                       Profile
                     </Link>
                   </Button>
                   <FriendAction friendshipId={friendship.id} />
-                </CardFooter>
+                </div>
               </div>
             </Card>
-          )
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

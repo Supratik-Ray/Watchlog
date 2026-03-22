@@ -31,6 +31,7 @@ import useSelectMediaStatus from "@/hooks/useSelectMediaStatus"
 import { deleteWatchlistItem, updateWatchlistItem } from "@/actions/watchlist"
 import toast from "react-hot-toast"
 import { Spinner } from "../ui/spinner"
+import Link from "next/link"
 
 function ActionCell({ row }: { row: Row<WatchListItem> }) {
   const item = row.original
@@ -153,13 +154,15 @@ export function getColumns(hideactions = false): ColumnDef<WatchListItem>[] {
       header: "Poster",
       cell: ({ row }) => {
         return (
-          <Image
-            src={getImageUrl(row.getValue("mediaPoster"), "w92")}
-            alt={row.getValue("mediaTitle")}
-            width={40}
-            height={60}
-            className="rounded-sm object-cover"
-          />
+          <Link href={`${row.getValue("mediaType")}/${row.original.mediaId}`}>
+            <Image
+              src={getImageUrl(row.getValue("mediaPoster"), "w92")}
+              alt={row.getValue("mediaTitle")}
+              width={40}
+              height={60}
+              className="rounded-sm object-cover"
+            />
+          </Link>
         )
       },
     },

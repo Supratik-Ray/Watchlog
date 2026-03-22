@@ -24,6 +24,7 @@ export async function addToWatchlist(watchData: WatchData) {
     const { userId } = await auth()
     if (!userId) return { success: false, message: "Unauthorized!" }
     await db.insert(watchlistTable).values({ ...watchData, userId })
+    revalidatePath(`/${watchData.mediaType}/${watchData.mediaId}`)
     return { success: true, message: "Successfully added to watchlist!" }
   } catch (error) {
     console.error(error)
