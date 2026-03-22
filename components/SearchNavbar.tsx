@@ -81,9 +81,11 @@ export default function SearchNavbar() {
       <nav className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-8">
         {/* left: logo + desktop nav links */}
         <div className="flex items-center gap-6">
-          <span className="text-xl font-extrabold tracking-tight sm:text-2xl">
-            Watch<span className="text-chart-2">logger</span>
-          </span>
+          <Link href="/home">
+            <span className="text-xl font-extrabold tracking-tight sm:text-2xl">
+              Watch<span className="text-chart-2">logger</span>
+            </span>
+          </Link>
           <div className="hidden items-center gap-6 md:flex">
             <Link
               href="/home"

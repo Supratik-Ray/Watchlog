@@ -17,14 +17,14 @@ export default function PosterCard({ type, item }: PostCardProp) {
       : (item as TvRecommendation).name
 
   return (
-    <Link href={`/${type}/${item.id}`} key={item.id}>
+    <Link href={`/${type}/${item.id}`} key={item.id} className="w-full">
       <Card className="p-0">
         <Image
           src={getImageUrl(item.poster_path, "w342")}
           alt={altText}
           width={342}
           height={513}
-          className="h-100 w-80"
+          className="h-auto w-full object-cover"
         />
       </Card>
     </Link>

@@ -11,7 +11,7 @@ export default async function HomePage() {
         <h2 className="mb-6 border-l-4 border-primary pl-3 text-base font-bold sm:text-lg">
           Trending movies
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-10">
+        <div className="grid grid-cols-1 gap-6 p-10 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:p-0 lg:grid-cols-4 lg:gap-10">
           <Suspense fallback={<LoadingSkeleton />}>
             <TrendingMovies />
           </Suspense>
@@ -23,7 +23,7 @@ export default async function HomePage() {
         <h2 className="mb-6 border-l-4 border-primary pl-3 text-base font-bold sm:text-lg">
           Trending TV shows
         </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-10">
+        <div className="grid grid-cols-1 gap-6 p-10 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:p-0 lg:grid-cols-4 lg:gap-10">
           <Suspense fallback={<LoadingSkeleton />}>
             <TrendingShows />
           </Suspense>
