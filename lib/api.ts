@@ -4,6 +4,8 @@ import {
   TrendingResults,
   Recommendations,
   TvRecommendations,
+  MovieDiscoverResult,
+  TvShowDiscoverResult,
 } from "tmdb-ts"
 const options = {
   method: "GET",
@@ -51,6 +53,27 @@ export async function getRecommendations(
 ): Promise<TvRecommendations>
 export async function getRecommendations(type: "movie" | "tv", id: string) {
   const url = `${process.env.TMDB_BASE_URL}/${type}/${id}/recommendations`
+  const res = await fetch(url, options)
+  const data = await res.json()
+  return data
+}
+
+export async function getByGenre(
+  type: "movie",
+  genreId: string,
+  page: number
+): Promise<MovieDiscoverResult>
+export async function getByGenre(
+  type: "tv",
+  genreId: string,
+  page: number
+): Promise<TvShowDiscoverResult>
+export async function getByGenre(
+  type: "tv" | "movie",
+  genreId: string,
+  page: number
+) {
+  const url = `${process.env.TMDB_BASE_URL}/discover/${type}?with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
   const res = await fetch(url, options)
   const data = await res.json()
   return data
