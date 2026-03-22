@@ -11,14 +11,13 @@ import {
   SparkleIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react/dist/ssr"
-import { SignInButton, SignUpButton } from "@clerk/nextjs"
+import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
-import { redirect } from "next/navigation"
+import Link from "next/link"
 
 export default async function MarketingPage() {
   const { userId } = await auth()
-
-  if (userId) redirect("/home")
+  const isAuthenticated = !!userId
 
   const features = [
     {
@@ -50,19 +49,25 @@ export default async function MarketingPage() {
             Watch<span className="text-chart-2">logger</span>
           </span>
           <div className="flex items-center gap-2 sm:gap-4">
-            <SignInButton>
-              <Button
-                variant="ghost"
-                className="hidden cursor-pointer text-sm sm:inline-flex"
-              >
-                Sign in
-              </Button>
-            </SignInButton>
-            <SignUpButton>
-              <Button className="cursor-pointer bg-chart-2 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
-                Get Started
-              </Button>
-            </SignUpButton>
+            {isAuthenticated ? (
+              <UserButton />
+            ) : (
+              <>
+                <SignInButton>
+                  <Button
+                    variant="ghost"
+                    className="hidden cursor-pointer text-sm sm:inline-flex"
+                  >
+                    Sign in
+                  </Button>
+                </SignInButton>
+                <SignUpButton>
+                  <Button className="cursor-pointer bg-chart-2 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
+                    Get Started
+                  </Button>
+                </SignUpButton>
+              </>
+            )}
           </div>
         </nav>
       </header>
@@ -85,21 +90,13 @@ export default async function MarketingPage() {
             is watching.
           </p>
 
-          <div className="flex w-full max-w-xs flex-col gap-3 sm:max-w-sm sm:flex-row sm:gap-4">
-            <SignInButton>
-              <Button
-                variant="outline"
-                className="flex-1 cursor-pointer border-white/20 bg-white/5 py-5 text-sm font-medium hover:bg-white/10"
-              >
-                Sign in
-              </Button>
-            </SignInButton>
-            <SignUpButton>
-              <Button className="flex-1 cursor-pointer bg-chart-2 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
-                Get Started →
-              </Button>
-            </SignUpButton>
-          </div>
+          {/* same for both — just go to home */}
+          <Button
+            className="cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80"
+            asChild
+          >
+            <Link href="/home">Go to Home →</Link>
+          </Button>
 
           <div className="mt-4 w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/40">
             <Image
@@ -165,19 +162,30 @@ export default async function MarketingPage() {
               experience cinema.
             </p>
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-              <SignInButton>
+              {isAuthenticated ? (
                 <Button
-                  variant="outline"
-                  className="w-full cursor-pointer border-white/20 bg-white/5 px-8 py-5 text-sm font-medium hover:bg-white/10 sm:w-auto"
+                  className="w-full cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80 sm:w-auto"
+                  asChild
                 >
-                  Sign in
+                  <Link href="/home">Go to Home →</Link>
                 </Button>
-              </SignInButton>
-              <SignUpButton>
-                <Button className="w-full cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80 sm:w-auto">
-                  Create free account →
-                </Button>
-              </SignUpButton>
+              ) : (
+                <>
+                  <SignInButton>
+                    <Button
+                      variant="outline"
+                      className="w-full cursor-pointer border-white/20 bg-white/5 px-8 py-5 text-sm font-medium hover:bg-white/10 sm:w-auto"
+                    >
+                      Sign in
+                    </Button>
+                  </SignInButton>
+                  <SignUpButton>
+                    <Button className="w-full cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80 sm:w-auto">
+                      Create free account →
+                    </Button>
+                  </SignUpButton>
+                </>
+              )}
             </div>
           </div>
         </section>
