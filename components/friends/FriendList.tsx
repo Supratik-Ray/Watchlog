@@ -1,11 +1,5 @@
 import SectionHeader from "../SectionHeader"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card"
+import { Card } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "../ui/button"
 import { ArrowSquareOutIcon } from "@phosphor-icons/react/dist/ssr"

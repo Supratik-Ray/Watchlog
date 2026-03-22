@@ -9,12 +9,9 @@ import {
 import Image from "next/image"
 import type { MovieDetails, TvShowDetails } from "tmdb-ts"
 import SectionHeader from "../SectionHeader"
-import { Card } from "../ui/card"
-import MediaActions from "./MediaActions"
 import { Suspense } from "react"
 import LoadingSkeleton from "../home/LoadingSkeleton"
 import Recommendations from "./Recommendations"
-import { auth } from "@clerk/nextjs/server"
 import MediaActionArea from "./MediaActionArea"
 
 export default async function DetailsPage({
@@ -25,7 +22,6 @@ export default async function DetailsPage({
   type: "movie" | "tv"
 }) {
   const { id } = await params
-  const { userId } = await auth()
 
   const data =
     type === "movie"
@@ -60,7 +56,7 @@ export default async function DetailsPage({
 
         <div className="relative z-50 mx-4 flex w-full max-w-3xl flex-col items-center gap-5 rounded-md bg-black/50 p-5 shadow-md backdrop-blur-sm sm:mx-8 sm:flex-row sm:items-start sm:gap-8 sm:p-8">
           {/* poster */}
-          <div className="w-28 shrink-0 overflow-hidden rounded-md shadow-md sm:w-40 lg:w-[200px]">
+          <div className="w-28 shrink-0 overflow-hidden rounded-md shadow-md sm:w-40 lg:w-50">
             <Image
               src={getImageUrl(data.poster_path, "w500")}
               alt={title}

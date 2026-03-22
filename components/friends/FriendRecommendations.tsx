@@ -1,11 +1,5 @@
 import SectionHeader from "../SectionHeader"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card"
+import { Card } from "../ui/card"
 import { auth, clerkClient } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { eq } from "drizzle-orm"

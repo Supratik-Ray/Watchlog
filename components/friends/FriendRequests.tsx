@@ -1,13 +1,7 @@
 import SectionHeader from "../SectionHeader"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card"
+import { Card } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CheckCircleIcon, XCircleIcon } from "@phosphor-icons/react/dist/ssr"
+
 import { db } from "@/lib/db"
 import { and, eq } from "drizzle-orm"
 import { friendshipsTable } from "@/db/schema"
