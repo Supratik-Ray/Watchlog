@@ -11,8 +11,15 @@ import {
   SparkleIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react/dist/ssr"
+import { SignInButton, SignUpButton } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 
-export default function MarketingPage() {
+export default async function MarketingPage() {
+  const { userId } = await auth()
+
+  if (userId) redirect("/home")
+
   const features = [
     {
       icon: ListBulletsIcon,
@@ -43,15 +50,19 @@ export default function MarketingPage() {
             Watch<span className="text-chart-2">logger</span>
           </span>
           <div className="flex items-center gap-2 sm:gap-4">
-            <Button
-              variant="ghost"
-              className="hidden cursor-pointer text-sm sm:inline-flex"
-            >
-              Sign in
-            </Button>
-            <Button className="cursor-pointer bg-chart-2 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
-              Get Started
-            </Button>
+            <SignInButton>
+              <Button
+                variant="ghost"
+                className="hidden cursor-pointer text-sm sm:inline-flex"
+              >
+                Sign in
+              </Button>
+            </SignInButton>
+            <SignUpButton>
+              <Button className="cursor-pointer bg-chart-2 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
+                Get Started
+              </Button>
+            </SignUpButton>
           </div>
         </nav>
       </header>
@@ -75,15 +86,19 @@ export default function MarketingPage() {
           </p>
 
           <div className="flex w-full max-w-xs flex-col gap-3 sm:max-w-sm sm:flex-row sm:gap-4">
-            <Button
-              variant="outline"
-              className="flex-1 cursor-pointer border-white/20 bg-white/5 py-5 text-sm font-medium hover:bg-white/10"
-            >
-              Sign in
-            </Button>
-            <Button className="flex-1 cursor-pointer bg-chart-2 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
-              Get Started →
-            </Button>
+            <SignInButton>
+              <Button
+                variant="outline"
+                className="flex-1 cursor-pointer border-white/20 bg-white/5 py-5 text-sm font-medium hover:bg-white/10"
+              >
+                Sign in
+              </Button>
+            </SignInButton>
+            <SignUpButton>
+              <Button className="flex-1 cursor-pointer bg-chart-2 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80">
+                Get Started →
+              </Button>
+            </SignUpButton>
           </div>
 
           <div className="mt-4 w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/40">
@@ -138,9 +153,7 @@ export default function MarketingPage() {
         {/* CTA */}
         <section className="container mx-auto mb-28 px-4 sm:px-8">
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-amber-900/60 px-6 py-14 text-center shadow-2xl sm:px-12 sm:py-20">
-            {/* decorative ring */}
             <div className="pointer-events-none absolute top-0 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-chart-2/10 blur-3xl" />
-
             <p className="mb-3 text-xs font-semibold tracking-widest text-chart-2 uppercase sm:text-sm">
               Join the community
             </p>
@@ -152,15 +165,19 @@ export default function MarketingPage() {
               experience cinema.
             </p>
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-              <Button
-                variant="outline"
-                className="w-full cursor-pointer border-white/20 bg-white/5 px-8 py-5 text-sm font-medium hover:bg-white/10 sm:w-auto"
-              >
-                Learn more
-              </Button>
-              <Button className="w-full cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80 sm:w-auto">
-                Create free account →
-              </Button>
+              <SignInButton>
+                <Button
+                  variant="outline"
+                  className="w-full cursor-pointer border-white/20 bg-white/5 px-8 py-5 text-sm font-medium hover:bg-white/10 sm:w-auto"
+                >
+                  Sign in
+                </Button>
+              </SignInButton>
+              <SignUpButton>
+                <Button className="w-full cursor-pointer bg-chart-2 px-8 py-5 text-sm font-bold text-sidebar-primary-foreground hover:bg-chart-2/80 sm:w-auto">
+                  Create free account →
+                </Button>
+              </SignUpButton>
             </div>
           </div>
         </section>
