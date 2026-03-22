@@ -10,14 +10,14 @@ export default async function TrendingMovies() {
   return (
     <>
       {data.results.slice(0, 4).map((movie) => (
-        <Link href={`/movie/${movie.id}`} key={movie.id}>
-          <Card className="p-0">
+        <Link href={`/movie/${movie.id}`} key={movie.id} className="w-full">
+          <Card className="w-full overflow-hidden p-0">
             <Image
               src={getImageUrl(movie.poster_path, "w342")}
               alt={movie.title}
               width={342}
               height={513}
-              className="h-100 w-80"
+              className="h-auto w-full object-cover"
             />
           </Card>
         </Link>

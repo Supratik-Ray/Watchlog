@@ -10,14 +10,14 @@ export default async function TrendingShows() {
   return (
     <>
       {data.results.slice(0, 4).map((show) => (
-        <Link href={`/tv/${show.id}`} key={show.id}>
+        <Link href={`/tv/${show.id}`} key={show.id} className="w-full">
           <Card className="p-0">
             <Image
               src={getImageUrl(show.poster_path, "w342")}
               alt={show.name}
               width={342}
               height={513}
-              className="h-100 w-80"
+              className="h-auto w-full object-cover"
             />
           </Card>
         </Link>
