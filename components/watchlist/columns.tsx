@@ -154,7 +154,7 @@ export function getColumns(hideactions = false): ColumnDef<WatchListItem>[] {
       header: "Poster",
       cell: ({ row }) => {
         return (
-          <Link href={`${row.getValue("mediaType")}/${row.original.mediaId}`}>
+          <Link href={`/${row.getValue("mediaType")}/${row.original.mediaId}`}>
             <Image
               src={getImageUrl(row.getValue("mediaPoster"), "w92")}
               alt={row.getValue("mediaTitle")}
