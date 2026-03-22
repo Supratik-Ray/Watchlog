@@ -161,7 +161,7 @@ export default function SearchNavbar() {
             onClick={() => setMobileSearchOpen((v) => !v)}
             aria-label="Toggle search"
           >
-            <MagnifyingGlassIcon size={20} />
+            <MagnifyingGlassIcon size={24} />
           </Button>
 
           <NotificationArea />

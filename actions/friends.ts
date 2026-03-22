@@ -70,6 +70,8 @@ export async function SendFriendRequest(receiverId: string) {
       type: "friend_request",
       senderId: userId,
     })
+
+    revalidatePath(`/friends/${receiverId}`)
     return { success: true, message: "Sent friend request!" }
   } catch (error) {
     console.log(error)
